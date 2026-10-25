@@ -1,0 +1,144 @@
+{
+  "info": {
+    "_postman_id": "c2b7eb8a-3079-4b66-a99d-fbf946dc72e8",
+    "name": "API de productos y categorías",
+    "description": "Colección CRUD para la API académica de productos y categorías. Crear una categoría antes de crear productos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5134"
+    },
+    {
+      "key": "categoriaId",
+      "value": "1"
+    },
+    {
+      "key": "productoId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Categorías",
+      "item": [
+        {
+          "name": "Listar categorías",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/categorias"
+          }
+        },
+        {
+          "name": "Crear categoría",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Tecnología\",\n  \"descripcion\": \"Productos electrónicos y accesorios\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/categorias"
+          }
+        },
+        {
+          "name": "Buscar categoría por ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/categorias/{{categoriaId}}"
+          }
+        },
+        {
+          "name": "Actualizar categoría",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Tecnología\",\n  \"descripcion\": \"Electrónica, computación y accesorios\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/categorias/{{categoriaId}}"
+          }
+        },
+        {
+          "name": "Eliminar categoría (sin productos asociados)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/categorias/{{categoriaId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/productos"
+          }
+        },
+        {
+          "name": "Crear producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Teclado inalámbrico\",\n  \"descripcion\": \"Teclado compacto con conexión Bluetooth\",\n  \"precio\": 29.99,\n  \"stock\": 15,\n  \"categoriaId\": {{categoriaId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/productos"
+          }
+        },
+        {
+          "name": "Buscar producto por ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/productos/{{productoId}}"
+          }
+        },
+        {
+          "name": "Actualizar producto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Teclado inalámbrico\",\n  \"descripcion\": \"Teclado compacto con conexión Bluetooth\",\n  \"precio\": 27.5,\n  \"stock\": 20,\n  \"categoriaId\": {{categoriaId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/productos/{{productoId}}"
+          }
+        },
+        {
+          "name": "Eliminar producto",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/productos/{{productoId}}"
+          }
+        }
+      ]
+    }
+  ]
+}

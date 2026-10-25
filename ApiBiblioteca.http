@@ -1,37 +1,67 @@
 @ApiBiblioteca_HostAddress = http://localhost:5134
-@LibroId = 1
+@CategoriaId = 1
+@ProductoId = 1
 
-### Listar libros
-GET {{ApiBiblioteca_HostAddress}}/api/v1/libros
+### Listar categorías
+GET {{ApiBiblioteca_HostAddress}}/api/v1/categorias
 Accept: application/json
 
-### Crear un libro
-POST {{ApiBiblioteca_HostAddress}}/api/v1/libros
+### Crear una categoría
+POST {{ApiBiblioteca_HostAddress}}/api/v1/categorias
 Content-Type: application/json
 
 {
-  "titulo": "Cien años de soledad",
-  "autor": "Gabriel García Márquez",
-  "genero": "Novela",
-  "anioPublicacion": 1967,
-  "disponible": true
+  "nombre": "Tecnología",
+  "descripcion": "Productos electrónicos y accesorios"
 }
 
-### Buscar libro por ID (cambia LibroId por el ID devuelto al crear)
-GET {{ApiBiblioteca_HostAddress}}/api/v1/libros/{{LibroId}}
+### Buscar categoría por ID
+GET {{ApiBiblioteca_HostAddress}}/api/v1/categorias/{{CategoriaId}}
 Accept: application/json
 
-### Actualizar libro por ID
-PUT {{ApiBiblioteca_HostAddress}}/api/v1/libros/{{LibroId}}
+### Actualizar categoría por ID
+PUT {{ApiBiblioteca_HostAddress}}/api/v1/categorias/{{CategoriaId}}
 Content-Type: application/json
 
 {
-  "titulo": "Cien años de soledad",
-  "autor": "Gabriel García Márquez",
-  "genero": "Novela",
-  "anioPublicacion": 1967,
-  "disponible": false
+  "nombre": "Tecnología",
+  "descripcion": "Electrónica, computación y accesorios"
 }
 
-### Eliminar libro por ID
-DELETE {{ApiBiblioteca_HostAddress}}/api/v1/libros/{{LibroId}}
+### Listar productos
+GET {{ApiBiblioteca_HostAddress}}/api/v1/productos
+Accept: application/json
+
+### Crear un producto (crear primero la categoría y usar su ID)
+POST {{ApiBiblioteca_HostAddress}}/api/v1/productos
+Content-Type: application/json
+
+{
+  "nombre": "Teclado inalámbrico",
+  "descripcion": "Teclado compacto con conexión Bluetooth",
+  "precio": 29.99,
+  "stock": 15,
+  "categoriaId": {{CategoriaId}}
+}
+
+### Buscar producto por ID
+GET {{ApiBiblioteca_HostAddress}}/api/v1/productos/{{ProductoId}}
+Accept: application/json
+
+### Actualizar producto por ID
+PUT {{ApiBiblioteca_HostAddress}}/api/v1/productos/{{ProductoId}}
+Content-Type: application/json
+
+{
+  "nombre": "Teclado inalámbrico",
+  "descripcion": "Teclado compacto con conexión Bluetooth",
+  "precio": 27.50,
+  "stock": 20,
+  "categoriaId": {{CategoriaId}}
+}
+
+### Eliminar producto por ID
+DELETE {{ApiBiblioteca_HostAddress}}/api/v1/productos/{{ProductoId}}
+
+### Eliminar categoría por ID (solo si ya no tiene productos)
+DELETE {{ApiBiblioteca_HostAddress}}/api/v1/categorias/{{CategoriaId}}
