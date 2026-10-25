@@ -1,0 +1,168 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">CATÁLOGO</p>
+    <h2>Productos</h2>
+    <p class="subtitle">Administra los productos y su disponibilidad.</p>
+  </div>
+  <div class="count-card">
+    <span>{{ productos().length }}</span>
+    <small>productos registrados</small>
+  </div>
+</section>
+
+<div class="content-grid">
+  <section class="panel form-panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">{{ editandoId === null ? 'NUEVO REGISTRO' : 'EDICIÓN' }}</p>
+        <h3>{{ editandoId === null ? 'Agregar producto' : 'Editar producto' }}</h3>
+      </div>
+      @if (editandoId !== null) {
+        <button class="text-button" type="button" (click)="cancelarEdicion()">Cancelar</button>
+      }
+    </div>
+
+    <form #productoForm="ngForm" (ngSubmit)="guardar()">
+      <label for="nombreProducto">Nombre</label>
+      <input
+        id="nombreProducto"
+        name="nombre"
+        type="text"
+        placeholder="Ej. Teclado inalámbrico"
+        [(ngModel)]="formulario.nombre"
+        required
+        minlength="2"
+        maxlength="120"
+      />
+
+      <label for="descripcionProducto">Descripción</label>
+      <textarea
+        id="descripcionProducto"
+        name="descripcion"
+        placeholder="Detalles del producto"
+        [(ngModel)]="formulario.descripcion"
+        maxlength="500"
+        rows="3"
+      ></textarea>
+
+      <div class="field-row">
+        <div>
+          <label for="precioProducto">Precio</label>
+          <div class="input-prefix">
+            <span>$</span>
+            <input
+              id="precioProducto"
+              name="precio"
+              type="number"
+              min="0.01"
+              step="0.01"
+              [(ngModel)]="formulario.precio"
+              required
+            />
+          </div>
+        </div>
+        <div>
+          <label for="stockProducto">Stock</label>
+          <input
+            id="stockProducto"
+            name="stock"
+            type="number"
+            min="0"
+            step="1"
+            [(ngModel)]="formulario.stock"
+            required
+          />
+        </div>
+      </div>
+
+      <label for="categoriaProducto">Categoría</label>
+      <select
+        id="categoriaProducto"
+        name="categoriaId"
+        [(ngModel)]="formulario.categoriaId"
+        required
+      >
+        <option [ngValue]="0" disabled>Selecciona una categoría</option>
+        @for (categoria of categorias(); track categoria.id) {
+          <option [ngValue]="categoria.id">{{ categoria.nombre }}</option>
+        }
+      </select>
+
+      @if (categorias().length === 0) {
+        <p class="inline-hint">Primero registra una categoría en la sección Categorías.</p>
+      }
+
+      @if (error()) {
+        <p class="feedback error" role="alert">{{ error() }}</p>
+      }
+      @if (mensaje()) {
+        <p class="feedback success" role="status">{{ mensaje() }}</p>
+      }
+
+      <button class="primary-button full-button" type="submit" [disabled]="productoForm.invalid || formulario.categoriaId === 0 || guardando || categorias().length === 0">
+        {{ guardando ? 'Guardando…' : editandoId === null ? 'Guardar producto' : 'Actualizar producto' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="panel list-panel">
+    <div class="list-toolbar">
+      <div>
+        <p class="eyebrow">INVENTARIO</p>
+        <h3>Todos los productos</h3>
+      </div>
+      <input
+        class="search-input"
+        type="search"
+        aria-label="Buscar productos"
+        placeholder="Buscar producto..."
+        [(ngModel)]="busqueda"
+      />
+    </div>
+
+    @if (cargando()) {
+      <div class="empty-state">Cargando productos...</div>
+    } @else if (productos().length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">□</span>
+        <strong>Aún no hay productos</strong>
+        <span>Agrega el primero desde el formulario.</span>
+      </div>
+    } @else if ((productos() | filtroProductos: busqueda).length === 0) {
+      <div class="empty-state">No hay resultados para "{{ busqueda }}".</div>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th><span class="visually-hidden">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (producto of productos() | filtroProductos: busqueda; track producto.id) {
+              <tr>
+                <td>
+                  <strong>{{ producto.nombre }}</strong>
+                  <small>{{ producto.descripcion || 'Sin descripción' }}</small>
+                </td>
+                <td><span class="category-tag">{{ producto.categoriaNombre }}</span></td>
+                <td class="price">{{ producto.precio | currency:'USD':'symbol':'1.2-2' }}</td>
+                <td><span class="stock-tag" [appStockBajo]="producto.stock">{{ producto.stock }} uds.</span></td>
+                <td>
+                  <div class="row-actions">
+                    <button class="icon-button" type="button" aria-label="Editar producto" (click)="editar(producto)">Editar</button>
+                    <button class="icon-button delete-button" type="button" aria-label="Eliminar producto" (click)="eliminar(producto)">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</div>

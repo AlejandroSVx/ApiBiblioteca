@@ -5,9 +5,13 @@ API REST académica desarrollada con ASP.NET Core 10, Entity Framework Core y SQ
 ## Requisitos y ejecución
 
 - .NET SDK 10
-- Desde la raíz del proyecto: `dotnet run`
+- Node.js compatible con Angular 22
+- Inicia la API desde la raíz del repositorio con `dotnet run`
 - La aplicación crea `ApiBiblioteca.db` al iniciar y muestra en la terminal la dirección local.
 - En entorno Development, la especificación OpenAPI está disponible en `/openapi/v1.json`.
+- En otra terminal ejecuta `cd frontend`, `npm install` y `npm start`. Abre `http://localhost:4200`.
+- El frontend Angular usa componentes separados para productos y categorías, un servicio HTTP, un pipe de búsqueda y una directiva visual para indicar stock bajo.
+- La API permite solicitudes CORS desde `http://localhost:4200` y `http://127.0.0.1:4200`.
 
 ## Endpoints
 
@@ -32,4 +36,9 @@ Los datos de entrada se validan mediante DTOs. Para crear o actualizar un produc
 
 `ApiBiblioteca.http` contiene solicitudes de ejemplo que se pueden ejecutar desde Visual Studio Code. Crear primero una categoría y usar el ID que devuelve al probar los endpoints de productos.
 
-`ApiProductos.postman_collection.json` es una colección JSON compatible con Postman Collection v2.1. Se puede importar en Flashpost si la herramienta admite ese formato y luego exportar/guardar desde Flashpost el JSON requerido por la entrega.
+`ApiProductos.postman_collection.json` contiene las solicitudes HTTP de productos y categorías en formato de colección Postman v2.1 para importarla en la extensión Flashpost.
+
+## Estructura
+
+- `Controllers`, `Services`, `Models`, `DTOs` y `Data`: API ASP.NET Core.
+- `frontend`: aplicación Angular 22.

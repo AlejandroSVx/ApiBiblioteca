@@ -1,0 +1,96 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">ORGANIZACIÓN</p>
+    <h2>Categorías</h2>
+    <p class="subtitle">Agrupa tus productos para mantener el catálogo ordenado.</p>
+  </div>
+  <div class="count-card">
+    <span>{{ categorias().length }}</span>
+    <small>categorías registradas</small>
+  </div>
+</section>
+
+<div class="content-grid">
+  <section class="panel form-panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">{{ editandoId === null ? 'NUEVO REGISTRO' : 'EDICIÓN' }}</p>
+        <h3>{{ editandoId === null ? 'Agregar categoría' : 'Editar categoría' }}</h3>
+      </div>
+      @if (editandoId !== null) {
+        <button class="text-button" type="button" (click)="cancelarEdicion()">Cancelar</button>
+      }
+    </div>
+
+    <form #categoriaForm="ngForm" (ngSubmit)="guardar()">
+      <label for="nombreCategoria">Nombre</label>
+      <input
+        id="nombreCategoria"
+        name="nombre"
+        type="text"
+        placeholder="Ej. Tecnología"
+        [(ngModel)]="formulario.nombre"
+        required
+        minlength="2"
+        maxlength="80"
+      />
+
+      <label for="descripcionCategoria">Descripción</label>
+      <textarea
+        id="descripcionCategoria"
+        name="descripcion"
+        placeholder="Describe esta categoría"
+        [(ngModel)]="formulario.descripcion"
+        maxlength="250"
+        rows="4"
+      ></textarea>
+
+      @if (error()) {
+        <p class="feedback error" role="alert">{{ error() }}</p>
+      }
+      @if (mensaje()) {
+        <p class="feedback success" role="status">{{ mensaje() }}</p>
+      }
+
+      <button class="primary-button full-button" type="submit" [disabled]="categoriaForm.invalid || guardando">
+        {{ guardando ? 'Guardando…' : editandoId === null ? 'Guardar categoría' : 'Actualizar categoría' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="panel list-panel">
+    <div class="list-toolbar">
+      <div>
+        <p class="eyebrow">CATÁLOGO</p>
+        <h3>Todas las categorías</h3>
+      </div>
+    </div>
+
+    @if (cargando()) {
+      <div class="empty-state">Cargando categorías...</div>
+    } @else if (categorias().length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">□</span>
+        <strong>Aún no hay categorías</strong>
+        <span>Agrega una para comenzar a registrar productos.</span>
+      </div>
+    } @else {
+      <div class="category-list">
+        @for (categoria of categorias(); track categoria.id) {
+          <article class="category-item">
+            <div class="category-symbol">{{ categoria.nombre.charAt(0).toUpperCase() }}</div>
+            <div class="category-copy">
+              <strong>{{ categoria.nombre }}</strong>
+              <span>{{ categoria.descripcion || 'Sin descripción' }}</span>
+            </div>
+            <div class="row-actions">
+              <button class="icon-button" type="button" (click)="editar(categoria)">Editar</button>
+              <button class="icon-button delete-button" type="button" (click)="eliminar(categoria)">Eliminar</button>
+            </div>
+          </article>
+        }
+      </div>
+      <p class="list-note">No se puede eliminar una categoría que tenga productos asociados.</p>
+    }
+  </section>
+</div>
